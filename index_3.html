@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="no"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Åmot Vestre Viltlag</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bark:    #1a1610;
+      --moss:    #2e3b2a;
+      --lichen:  #4a5e3a;
+      --leaf:    #7a9c5a;
+      --amber:   #c8882a;
+      --cream:   #f0e8d8;
+      --fog:     #8a9080;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bark);
+      color: var(--cream);
+      font-family: 'Lato', sans-serif;
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: linear-gradient(to bottom, rgba(26,22,16,0.97), transparent);
+      backdrop-filter: blur(2px);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+    }
+
+    .nav-links {
+      display: flex; gap: 2.5rem; list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      transition: opacity 0.2s, color 0.2s;
+    }
+
+    .nav-links a:hover { opacity: 1; color: var(--amber); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 6rem 3rem 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 60%, rgba(46,59,42,0.5) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(74,94,58,0.2) 0%, transparent 50%),
+        linear-gradient(170deg, #0d1209 0%, #1a1610 40%, #2a2218 100%);
+    }
+
+    /* Silhouette trees */
+    .hero-trees {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 45%;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320' preserveAspectRatio='none'%3E%3Cpath fill='%230d1209' d='M0,320 L0,180 L30,150 L60,200 L80,120 L100,170 L130,80 L160,130 L180,60 L200,100 L220,40 L240,90 L260,30 L280,80 L310,50 L330,110 L360,20 L390,70 L410,10 L430,60 L460,30 L490,90 L520,15 L550,70 L580,35 L610,100 L640,20 L670,80 L700,40 L730,110 L760,25 L790,85 L820,10 L850,60 L880,30 L910,90 L940,20 L970,75 L1000,15 L1030,65 L1060,35 L1090,95 L1120,20 L1150,80 L1180,45 L1210,105 L1240,30 L1270,90 L1300,55 L1330,120 L1360,70 L1390,140 L1440,100 L1440,320 Z'/%3E%3C/svg%3E")
+        no-repeat bottom center / 100% auto;
+    }
+
+    .hero-tag {
+      position: relative;
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero h1 {
+      position: relative;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.5rem, 9vw, 8rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+
+    .hero h1 span { color: var(--leaf); }
+
+    .hero-sub {
+      position: relative;
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      color: var(--fog);
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+
+    .hero-scroll {
+      position: absolute; bottom: 2.5rem; right: 3rem;
+      writing-mode: vertical-rl;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--fog);
+      opacity: 0;
+      animation: fadeIn 1s 1.2s forwards;
+    }
+
+    /* ── SECTIONS COMMON ── */
+    section {
+      padding: 6rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 2rem;
+    }
+
+    .divider {
+      width: 60px; height: 2px;
+      background: var(--lichen);
+      margin: 1.5rem 0 2.5rem;
+    }
+
+    /* ── OM LAGET ── */
+    #om {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .om-text p { color: var(--fog); margin-bottom: 1rem; }
+
+    .om-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .stat-box {
+      background: var(--moss);
+      border: 1px solid rgba(122,156,90,0.15);
+      padding: 1.8rem 1.5rem;
+      border-radius: 2px;
+      transition: border-color 0.3s;
+    }
+
+    .stat-box:hover { border-color: rgba(122,156,90,0.45); }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: var(--leaf);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--fog);
+      margin-top: 0.4rem;
+    }
+
+    /* ── SESONG / KALENDER ── */
+    #sesong { background: var(--moss); max-width: 100%; padding: 6rem 0; }
+    #sesong .inner { max-width: 1100px; margin: 0 auto; padding: 0 3rem; }
+
+    .sesong-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1px;
+      background: rgba(122,156,90,0.1);
+      border: 1px solid rgba(122,156,90,0.1);
+      margin-top: 3rem;
+    }
+
+    .sesong-item {
+      background: var(--moss);
+      padding: 2rem 1.8rem;
+      transition: background 0.25s;
+    }
+
+    .sesong-item:hover { background: var(--lichen); }
+
+    .sesong-item .dyr {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--cream);
+      margin-bottom: 0.3rem;
+    }
+
+    .sesong-item .dato {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      color: var(--amber);
+      text-transform: uppercase;
+    }
+
+    .sesong-item .info {
+      font-size: 0.85rem;
+      color: var(--fog);
+      margin-top: 0.6rem;
+    }
+
+    /* ── REGLER ── */
+    #regler { }
+
+    .regler-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .regel-card {
+      border-left: 3px solid var(--lichen);
+      padding: 1.5rem 2rem;
+      background: rgba(46,59,42,0.3);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .regel-card:hover {
+      border-color: var(--amber);
+      background: rgba(46,59,42,0.6);
+    }
+
+    .regel-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+      color: var(--cream);
+    }
+
+    .regel-card p {
+      font-size: 0.88rem;
+      color: var(--fog);
+    }
+
+    /* ── KART ── */
+    #kart { background: var(--bark); max-width: 100%; padding: 6rem 0; }
+    #kart .inner { max-width: 1100px; margin: 0 auto; padding: 0 3rem; }
+
+    .kart-pdf-block { margin-top: 2.5rem; }
+    .kart-pdf-label { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lichen); margin-bottom: 0.75rem; }
+    .kart-pdf-embed {
+      display: block; width: 100%; height: 700px;
+      border: 1px solid rgba(122,156,90,0.2);
+      border-radius: 2px;
+      background: rgba(13,18,9,0.5);
+    }
+    .kart-pdf-fallback { padding: 3rem; text-align: center; color: var(--fog); }
+    .btn-download, .kart-pdf-download {
+      display: inline-block; margin-top: 1rem;
+      padding: 0.6rem 1.4rem;
+      border: 1px solid var(--lichen);
+      color: var(--amber);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-download:hover, .kart-pdf-download:hover { background: rgba(122,156,90,0.15); }
+    .kart-pdf-download { display: block; margin-top: 0.6rem; font-size: 0.78rem; }
+    .kart-sub-label { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lichen); margin-top: 3rem; margin-bottom: 0; }
+
+    .kart-wrapper {
+      margin-top: 3rem;
+      border: 1px solid rgba(122,156,90,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+      height: 480px;
+      position: relative;
+    }
+
+    .kart-wrapper iframe {
+      width: 100%; height: 100%;
+      border: none;
+      filter: grayscale(30%) contrast(1.05);
+    }
+
+    .kart-overlay {
+      position: absolute; top: 1.5rem; left: 1.5rem;
+      background: rgba(26,22,16,0.88);
+      padding: 1rem 1.5rem;
+      border-left: 3px solid var(--amber);
+      font-size: 0.85rem;
+      color: var(--cream);
+      backdrop-filter: blur(4px);
+    }
+
+    .kart-overlay strong { display: block; color: var(--amber); margin-bottom: 0.2rem; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; }
+
+    /* ── KONTAKT ── */
+    #kontakt {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .kontakt-info p { color: var(--fog); margin-bottom: 0.6rem; font-size: 0.95rem; }
+    .kontakt-info strong { color: var(--cream); }
+
+    .kontakt-box {
+      background: var(--moss);
+      border: 1px solid rgba(122,156,90,0.15);
+      padding: 2.5rem;
+    }
+
+    .kontakt-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .kontakt-row {
+      display: flex; gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .kontakt-row label {
+      width: 100px;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fog);
+      padding-top: 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .kontakt-row span {
+      color: var(--cream);
+      font-size: 0.95rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0d1209;
+      border-top: 1px solid rgba(122,156,90,0.08);
+      text-align: center;
+      padding: 2.5rem;
+      font-size: 0.78rem;
+      color: var(--fog);
+      letter-spacing: 0.1em;
+    }
+
+    footer span { color: var(--amber); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 0.6; }
+    }
+
+    /* Intersection observer fade-in */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── JAKTFELT TABLE ── */
+    .jaktfelt-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2.5rem;
+      font-size: 0.88rem;
+    }
+    .jaktfelt-table th {
+      background: var(--moss);
+      color: var(--amber);
+      padding: 0.8rem 1rem;
+      text-align: left;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    .jaktfelt-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      color: var(--cream);
+    }
+    .jaktfelt-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .jaktfelt-table .nr { color: var(--amber); font-weight: 700; }
+    .jaktfelt-table .sum-row td {
+      border-top: 2px solid var(--lichen);
+      font-weight: 700;
+      color: var(--amber);
+      padding-top: 1rem;
+    }
+    .jaktfelt-table .num { text-align: right; }
+
+    /* ── JAKTKORT ── */
+    .jaktkort-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .jaktkort-card {
+      background: rgba(46,59,42,0.25);
+      border: 1px solid rgba(122,156,90,0.2);
+      padding: 1.8rem 1.5rem;
+    }
+    .jaktkort-card .viltart {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--amber);
+      margin-bottom: 0.6rem;
+    }
+    .jaktkort-card .jaktkort-type {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--leaf);
+      margin-bottom: 0.8rem;
+    }
+    .jaktkort-card p { font-size: 0.85rem; color: var(--fog); line-height: 1.6; }
+
+    /* ── FORMÅL ── */
+    .formaal-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .formaal-item {
+      border-left: 2px solid var(--lichen);
+      padding-left: 1.5rem;
+    }
+    .formaal-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--amber);
+      margin-bottom: 0.5rem;
+    }
+    .formaal-item p { font-size: 0.88rem; color: var(--fog); }
+
+    /* ── VEDTEKTER ── */
+    .vedtekter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .vedtekter-item {
+      background: rgba(26,22,16,0.7);
+      border: 1px solid rgba(74,94,58,0.25);
+      padding: 1.5rem;
+    }
+    .vedtekter-item .par {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+    }
+    .vedtekter-item h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
+      color: var(--cream);
+    }
+    .vedtekter-item p { font-size: 0.83rem; color: var(--fog); line-height: 1.6; }
+
+    /* ── SECTION DARK ALT ── */
+    .section-dark {
+      background: rgba(13,18,9,0.5);
+    }
+
+    /* ── KONTAKT-LENKER I TABELLER ── */
+    .jaktfelt-table a { color: var(--cream); text-decoration: none; }
+    .jaktfelt-table a:hover { color: var(--amber); text-decoration: underline; }
+
+    /* ── SMÅVILTKORT ── */
+    #smavilt { background: var(--moss); max-width: 100%; padding: 6rem 0; }
+    #smavilt .inner { max-width: 1100px; margin: 0 auto; padding: 0 3rem; }
+
+    .smavilt-badge {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.5rem 1.2rem;
+      border: 1px solid rgba(200,136,42,0.4);
+      color: var(--amber);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+
+    .smavilt-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .smavilt-card {
+      background: rgba(13,18,9,0.55);
+      border: 1px solid rgba(122,156,90,0.2);
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transition: border-color 0.25s;
+    }
+    .smavilt-card:hover { border-color: rgba(122,156,90,0.5); }
+
+    .smavilt-felt {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--cream);
+    }
+    .smavilt-nr {
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--leaf);
+    }
+    .smavilt-periode {
+      font-size: 0.8rem;
+      color: var(--amber);
+      letter-spacing: 0.08em;
+      margin-top: 0.3rem;
+    }
+    .smavilt-viltart {
+      font-size: 0.82rem;
+      color: var(--fog);
+      margin-bottom: 0.5rem;
+    }
+    .smavilt-pris-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-top: 1px solid rgba(122,156,90,0.12);
+      padding-top: 0.8rem;
+      margin-top: 0.3rem;
+    }
+    .smavilt-korttype {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fog);
+    }
+    .smavilt-kroner {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--leaf);
+    }
+    .smavilt-actions { margin-top: auto; padding-top: 1.2rem; }
+
+    .btn-bestill {
+      display: inline-block;
+      padding: 0.65rem 1.4rem;
+      background: var(--lichen);
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: background 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-bestill:hover { background: var(--leaf); }
+
+    .smavilt-vipps-info {
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--fog);
+    }
+    .smavilt-vipps-info strong { color: var(--cream); }
+
+    .smavilt-medlem {
+      margin-top: 2rem;
+      grid-column: 1 / -1;
+      background: rgba(200,136,42,0.07);
+      border: 1px solid rgba(200,136,42,0.25);
+      padding: 2rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .smavilt-medlem-left {}
+    .smavilt-medlem-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.4rem;
+    }
+    .smavilt-medlem-tittel {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .smavilt-medlem-txt {
+      font-size: 0.85rem;
+      color: var(--fog);
+      max-width: 560px;
+    }
+    .smavilt-pris-grid {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .smavilt-pris-box { text-align: center; }
+    .smavilt-pris-big {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--amber);
+      line-height: 1;
+    }
+    .smavilt-pris-lbl {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--fog);
+      margin-top: 0.3rem;
+    }
+
+    /* ── BESTANDSUTVIKLING ── */
+
+
+
+
+
+    /* ── DOKUMENTER ── */
+    .dok-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+    .dok-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--cream);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(122,156,90,0.2);
+    }
+    .dok-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1rem;
+      background: rgba(26,22,16,0.5);
+      border: 1px solid rgba(122,156,90,0.1);
+      text-decoration: none;
+      color: var(--cream);
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 0.6rem;
+    }
+    .dok-item:hover { border-color: var(--amber); background: rgba(200,136,42,0.07); }
+    .dok-icon {
+      font-size: 1.2rem;
+      color: var(--amber);
+      flex-shrink: 0;
+      width: 1.5rem;
+      text-align: center;
+    }
+    .dok-name {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--cream);
+    }
+    .dok-meta {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--fog);
+      margin-top: 0.15rem;
+      text-transform: uppercase;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      section { padding: 4rem 1.5rem; }
+      #om { grid-template-columns: 1fr; gap: 3rem; }
+      #kontakt { grid-template-columns: 1fr; gap: 3rem; }
+      .regler-grid { grid-template-columns: 1fr; }
+      .jaktkort-grid { grid-template-columns: 1fr; }
+      .formaal-cols { grid-template-columns: 1fr; }
+      .vedtekter-grid { grid-template-columns: 1fr; }
+      .hero { padding: 5rem 1.5rem 4rem; }
+      #sesong .inner, #kart .inner { padding: 0 1.5rem; }
+      .jaktfelt-table { font-size: 0.78rem; display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .jaktfelt-table th, .jaktfelt-table td { padding: 0.5rem 0.6rem; white-space: nowrap; }
+  
+  
+      .smavilt-grid { grid-template-columns: 1fr; }
+      .smavilt-medlem { grid-template-columns: 1fr; }
+      .smavilt-pris-grid { justify-content: flex-start; margin-top: 1rem; }
+      #smavilt .inner { padding: 0 1.5rem; }
+  
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">ÅVV</div>
+    <ul class="nav-links">
+      <li><a href="#om">Om laget</a></li>
+      <li><a href="#kart">Kart</a></li>
+      <li><a href="#jaktkort">Jaktkort</a></li>
+      <li><a href="#smavilt">Kjøp kort</a></li>
+      <li><a href="#jaktfelt">Jaktfelt</a></li>
+      <li><a href="#sesong">Sesong</a></li>
+      <li><a href="#vedtekter">Vedtekter</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-trees"></div>
+    <p class="hero-tag">Åmot kommune · Innlandet</p>
+    <h1>Åmot<br>Vestre<br><span>Viltlag</span></h1>
+    <p class="hero-sub">Organisert fellesskap mellom grunneiere og rettshavere på vestsiden av Åmot – etablert ved jordskifteavgjørelse 15. mai 2025.</p>
+    <div class="hero-scroll">Scroll ned ↓</div>
+  </div>
+
+  <!-- OM LAGET -->
+  <section id="om">
+    <div class="om-text reveal">
+      <p class="section-label">Om oss</p>
+      <h2>Laget og<br>vår historie</h2>
+      <div class="divider"></div>
+      <p>Åmot Vestre Viltlag er et organisert fellesskap mellom grunneiere og rettshavere innenfor et avgrenset område på vestsiden av Åmot kommune. Laget er opprettet ved jordskifteavgjørelse fra Østre Innlandet jordskifterett, avsagt 15. mai 2025.</p>
+      <p>Viltlaget er dannet av de to tidligere organisasjonene <strong>Hovdlia Viltstellområde</strong> og <strong>Åsbygda Viltstellområde</strong>. Lagets område er i sør avgrenset av Åsta, i vest mot Hamar og Ringsaker, i nord mot Stor-Elvdal og i øst mot Glomma.</p>
+      <p>Grunneiere med mer enn 20 dekar tellende areal hjorteviltjakt innenfor lagets grenser er pliktige medeiere. Laget er å anse som et tingsrettslig sameie, og eierandelen følger eiendommen.</p>
+    </div>
+    <div class="om-stats reveal">
+      <div class="stat-box">
+        <div class="stat-num">227 480</div>
+        <div class="stat-label">Dekar totalareal</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">124</div>
+        <div class="stat-label">Medeiere</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">12</div>
+        <div class="stat-label">Jaktfelt</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">2026</div>
+        <div class="stat-label">Ikrafttredelse</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORMÅL -->
+  <div id="formaal" class="section-dark">
+    <section>
+      <p class="section-label reveal">§ 3 Vedtekter</p>
+      <h2 class="reveal">Formål og<br>arbeidsområde</h2>
+      <div class="divider reveal"></div>
+      <p class="reveal" style="max-width:680px; color:var(--fog);">Lagets formål er å samle grunneierne og rettshaverne i området for i fellesskap å forvalte viltressursene på en måte som skaper økt grunnlag for sysselsetning og inntekt innenfor ramma av langsiktig forvaltning.</p>
+
+      <div class="formaal-cols reveal">
+        <div class="formaal-item">
+          <h3>Viltforvaltning</h3>
+          <p>Laget skal forvalte viltet, viltets leveområde og jakta innenfor lagets område. Alle viltarter er likestilte — ingen jaktform har forrang foran en annen.</p>
+        </div>
+        <div class="formaal-item">
+          <h3>Interesseorganisasjon</h3>
+          <p>Laget ivaretar medeiernes interesser overfor den offentlige forvaltningen og allmennheten i areal- og friluftsspørsmål.</p>
+        </div>
+        <div class="formaal-item">
+          <h3>Bærekraftig drift</h3>
+          <p>Laget skal drive innenfor ramma av passiv kapitalforvaltning og ikke drive økonomisk virksomhet. Overskudd fra jaktutleie fordeles til medeierne etter andel.</p>
+        </div>
+        <div class="formaal-item">
+          <h3>Samjakt og rekruttering</h3>
+          <p>Laget fremmer samjakt på tvers av viltarter. Småviltjakt er en viktig rekrutteringsarena for framtidige jegere.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- JAKTKORT -->
+  <div id="jaktkort" class="section-dark">
+    <section>
+      <p class="section-label reveal">Jakt</p>
+      <h2 class="reveal">Jaktmuligheter</h2>
+      <div class="divider reveal"></div>
+      <p class="reveal" style="max-width:680px; color:var(--fog);">Medeiere (grunneiere med andel i laget) har fortrinnsrett til alle jaktkort. Jakt kan også tilbys utenforstående dersom medeiere ikke benytter seg av tilbudet. Priser fastsettes av årsmøtet.</p>
+
+      <div class="jaktkort-grid">
+        <div class="jaktkort-card reveal">
+          <div class="viltart">Elg</div>
+          <div class="jaktkort-type">Lagsjakt</div>
+          <p>Jakt på elg er tilknyttet de enkelte jaktfelt.Kvoter tildeles de enkelte jaktfelt iht areal og bestandsplan. Selges ikke jaktkort på elg.</p>
+        </div>
+        <div class="jaktkort-card reveal">
+          <div class="viltart">Hjort</div>
+          <div class="jaktkort-type">Lagsjakt</div>
+          <p>Hjortejakt organiseres på samme måte som elgjakt.Jakt på hjort er tilknyttet de enkelte jaktfelt. Kvoter tildeles ikke jaktfeltet, men er en felles kvote for hele Viltlaget iht bestandsplan. Selges ikke jaktkort på hjort.</p>
+        </div>
+        <div class="jaktkort-card reveal">
+          <div class="viltart">Rådyr</div>
+          <div class="jaktkort-type">Lagsjakt · Kortjakt</div>
+          <p>Rådyrjakt tilbys jaktfeltene etter søknad. Jaktfeltene organiserer rådyrjakt selv slik at jaktkort kan selges. Ta kontakt med de enkelte jaktfelt hvis du er interessert i rådyrjakt.Jaktfeltene skal vite hvem som jakter til en hver tid. Det er ikke lov å videreselge jaktkort. Medeiere har fortrinnsrett.</p>
+        </div>
+        <div class="jaktkort-card reveal">
+          <div class="viltart">Småvilt</div>
+          <div class="jaktkort-type">Jaktkortsalg</div>
+          <p>Jaktkort for rype, skogsfugl, rødrev og bever kjøpes fra jaktfeltene. Jaktfeltene organiserer dette selv. Ta kontakt med de enkelte jaktfelt hvis du er interessert i småviltjakt. Medeiere har fortrinnsrett. Hvis du er medeier og ikke får tak i smålviltjakt på egenhånd har viltlaget et jaktfelt det kan jaktes småvilt i fra 10.september. Ta kontakt med styret..</p>
+        </div>
+        <div class="jaktkort-card reveal">
+          <div class="viltart">Rovdyr</div>
+          <div class="jaktkort-type">Lisens- og kvotejakt</div>
+          <p>Styret kan gi tillatelse til lisens-/kvotejakt på store rovdyr innen lagets område dersom offentlig forvaltning har åpnet for dette. Forhåndsgodkjenning kreves.</p>
+        </div>
+        <div class="jaktkort-card reveal">
+          <div class="viltart">Hvordan søke?</div>
+          <div class="jaktkort-type">Søknadsprosess</div>
+          <p>Ta kontakt med det enkelte jaktfelt for å kjøpe jaktkort. Se liste med kontaktperson for det enkelte jaktfelt. Tildelt jakt kan ikke overføres til andre uten godkjennelse fra styret. Vil du søke på jaktfeltet som tilbys av Viltlaget er søknadsfristen satt til 25.juli.</p>
+        </div>
+      </div>
+      <p style="margin-top:1.5rem; font-size:0.8rem; color:var(--fog);">Retningslinjer vedtatt av årsmøtet 12. mars 2026. Jakt på innmark krever skriftlig samtykke fra grunneier. Alle jegere plikter å ha gyldig jegeravgift og jegerprøve.</p>
+    </section>
+  </div>
+
+  <!-- SMÅVILTKORT -->
+  <div id="smavilt">
+    <div class="inner">
+      <p class="section-label reveal">Tilgjengelig nå</p>
+      <h2 class="reveal">Kjøp<br>småviltkort</h2>
+      <div class="divider reveal"></div>
+      <p class="reveal" style="max-width:680px;color:var(--fog);">Oversikt over jaktfelt som ønsker å tilby småviltkort via nettsiden til ÅVV er følgende. Ta kontakt direkte med ansvarlig for hvert felt for pris og bestilling.</p>
+      <div class="reveal"><span class="smavilt-badge">Sesong 2026 &nbsp;·&nbsp; 10. september – 24. september</span></div>
+
+      <div class="smavilt-grid reveal">
+
+
+        <!-- Hemmelnesset -->
+        <div class="smavilt-card">
+          <div class="smavilt-felt">Henri Knackstedt</div>
+          <div class="smavilt-nr">Felt 8</div>
+          <div class="smavilt-periode">10. sep – 24. sep 2026</div>
+          <div class="smavilt-viltart">Rype · Skogsfugl </div>
+          <p class="smavilt-vipps-info" style="margin-top:1rem;">Kontakt: <strong>henri.knackstedt@hotmail.com</strong></p>
+        </div>
+
+        <!-- Skramstad / Svenningsen -->
+        <div class="smavilt-card">
+          <div class="smavilt-felt">Skramstad / Svenningsen</div>
+          <div class="smavilt-nr">Felt 3</div>
+          <div class="smavilt-periode">10. sep – 24. sep 2026</div>
+          <div class="smavilt-viltart">Skogsfugl</div>
+          <p class="smavilt-vipps-info" style="margin-top:1rem;">Kontakt: <strong>post@holegard.no</strong></p>
+        </div>
+
+        <!-- Medeiere uten eget felt -->
+        <div class="smavilt-medlem">
+          <div class="smavilt-medlem-left">
+            <div class="smavilt-medlem-label">Medeiere i viltlaget</div>
+            <h3 class="smavilt-medlem-tittel">Kort for medeiere uten eget jaktfelt</h3>
+            <p class="smavilt-medlem-txt">Har du andel i laget men er ikke tilknyttet et enkeltfelt? Ta kontakt med feltene direkte for å avtale jakt. Finner du ikke et passende felt på egenhånd, kan styret hjelpe deg med å ordne jaktplass i et av lagets felt. Ta kontakt med styret.Anbefalte priser for småviltjakt for medlemmer er: </p>
+          </div>
+          <div>
+            <div class="smavilt-pris-grid">
+              <div class="smavilt-pris-box">
+                <div class="smavilt-pris-big" style="font-size:1.1rem;">Årskort</div>
+                <div class="smavilt-pris-lbl">2000 kr </div>
+              </div>
+              <div class="smavilt-pris-box">
+                <div class="smavilt-pris-big" style="font-size:1.1rem;">Ukeskort</div>
+                <div class="smavilt-pris-lbl">500 kr </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <p style="margin-top:1.2rem;font-size:0.78rem;color:var(--fog);">* Pris og korttyper fastsettes av det enkelte jaktfelt. Alle jegere må ha gyldig jegeravgift.</p>
+    </div>
+  </div>
+
+  <!-- JAKTFELT -->
+  <section id="jaktfelt">
+    <p class="section-label reveal">Jaktarealer 2026</p>
+    <h2 class="reveal">Jaktfelt og<br>arealer</h2>
+    <div class="divider reveal"></div>
+    <p class="reveal" style="max-width:680px; color:var(--fog);">Lagets areal er fordelt på 12 jaktfelt. Tabellen under viser jaktlag, tellende areal og jaktbart areal per felt. Et jaktfelt for elg/hjort/rådyr skal være på minst 10 000 dekar. Nordre og Søndre Raufjellsameiet er egne jaktfelt.</p>
+
+    <table class="jaktfelt-table reveal">
+      <thead>
+        <tr>
+          <th>Nr</th>
+          <th>Jaktlag / Grunneier</th>
+          <th>Kontaktperson</th>
+          <th>E-post</th>
+          <th>Telefon</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="nr">1</td>
+          <td>Knackstedt og Bolstad</td>
+          <td>Magne Knackstedt</td>
+          <td><a href="mailto:[epost]">magneknackstedt@hotmail.com</a></td>
+          <td>[tlf]</td>
+        </tr>
+        <tr>
+          <td class="nr">2</td>
+          <td>Dufseth</td>
+          <td>Ole Erik Dufseth</td>
+          <td><a href="mailto:[epost]">oedufseth@gmail.com</a></td>
+          <td>95876207</td>
+        </tr>
+        <tr>
+          <td class="nr">3</td>
+          <td>Skramstad og Svenningsen</td>
+          <td>Theodor Skramstad</td>
+          <td><a href="mailto:[epost]">post@holegard.no</a></td>
+          <td>94005635</td>
+        </tr>
+        <tr>
+          <td class="nr">4</td>
+          <td>Grønli</td>
+          <td>Anders Grønli</td>
+          <td><a href="mailto:[epost]">anders@sostu.no</a></td>
+          <td>48992742</td>
+        </tr>
+        <tr>
+          <td class="nr">5</td>
+          <td>Søndre Raufjellsameie</td>
+          <td>[Kontaktperson]</td>
+          <td><a href="mailto:[epost]">[epost]</a></td>
+          <td>[tlf]</td>
+        </tr>
+        <tr>
+          <td class="nr">6</td>
+          <td>Nordre Raufjellsameie</td>
+          <td>[Kontaktperson]</td>
+          <td><a href="mailto:[epost]">[epost]</a></td>
+          <td>[tlf]</td>
+        </tr>
+        <tr>
+          <td class="nr">7</td>
+          <td>Henri Knackstedt (Sorknes)</td>
+          <td>Henri Knackstedt</td>
+          <td><a href="mailto:[epost]">henri.knackstedt@hotmail.com</a></td>
+          <td>41401575</td>
+        </tr>
+        <tr>
+          <td class="nr">8</td>
+          <td>Henri Knackstedt (Hemmelnesset)</td>
+          <td>Henri Knackstedt</td>
+          <td><a href="mailto:[epost]">henri.knackstedt@hotmail.com</a></td>
+          <td>41401575</td>
+        </tr>
+        <tr>
+          <td class="nr">9</td>
+          <td>Tore Hartz</td>
+          <td>Tore Hartz</td>
+          <td><a href="mailto:[epost]">thartz@online.no</a></td>
+          <td>95022330</td>
+        </tr>
+        <tr>
+          <td class="nr">10</td>
+          <td>Rustad</td>
+          <td>Helge Rustad</td>
+          <td><a href="mailto:[epost]">helge@rustadskogsdrift.no</a></td>
+          <td>95856720</td>
+        </tr>
+        <tr>
+          <td class="nr">11</td>
+          <td>Horndalen</td>
+          <td>Erik Horndalen</td>
+          <td><a href="mailto:[epost]">erik@horndalenas.no</a></td>
+          <td>95497791</td>
+        </tr>
+        <tr>
+          <td class="nr">12</td>
+          <td>Mæhlen</td>
+          <td>Nils Ingar Mæhlen</td>
+          <td><a href="mailto:[epost]">nilsim99@gmail.com</a></td>
+          <td>91822170</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:1rem; font-size:0.78rem; color:var(--fog);">* Fyll inn kontaktperson, e-post og telefon for hvert jaktfelt. Kontaktpersonen er som regel jaktleder eller grunneier for feltet. For jakt- og kortspørsmål, ta kontakt direkte med det aktuelle feltet.</p>
+  </section>
+
+  <!-- KART -->
+  <div id="kart">
+    <div class="inner">
+      <p class="section-label reveal">Jaktområde</p>
+      <h2 class="reveal">Kart over<br>feltet</h2>
+      <div class="divider reveal"></div>
+
+      <!-- Jaktfelt-kart (PDF) -->
+      <div class="kart-pdf-block reveal">
+        <p class="kart-pdf-label">Offisielt jaktfeltkart – vedtatt på årsmøtet 12. mars 2026</p>
+        <object
+          data="Kart jaktfelt feb26.pdf"
+          type="application/pdf"
+          class="kart-pdf-embed"
+          aria-label="Jaktfeltkart Åmot Vestre Viltlag">
+          <div class="kart-pdf-fallback">
+            <p>Nettleseren din kan ikke vise PDF-filer direkte.</p>
+            <a href="Kart-jaktfelt%20feb%2026%20(2).pdf" download class="btn-download">Last ned jaktfeltkartet (PDF)</a>
+          </div>
+        </object>
+        <a href="Kart-jaktfelt%20feb%2026%20(2).pdf" download class="kart-pdf-download">&#8595; Last ned kart (PDF)</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- REGLER -->
+  <section id="regler">
+    <p class="section-label reveal">Retningslinjer</p>
+    <h2 class="reveal">Regler og<br>etikk</h2>
+    <div class="divider reveal"></div>
+
+    <div class="regler-grid">
+      <div class="regel-card reveal">
+        <h3>Kvote og rapportering</h3>
+        <p>Alle felte dyr skal meldes til lagets ansvarlige innen 24 timer. Husk og rapportere statistikk iht Viltlagets instrukser for de ulike artene det jaktes på.</p>
+      </div>
+      <div class="regel-card reveal">
+        <h3>Sikkerhet i marka</h3>
+        <p>Skudd på lange hold, dyr i bevegelse eller fra skytestillinger det ikke er trent på øker sjansen for skadeskyting. Vær sikker før det avvfyres skudd. Aldri skyt mot ukjent mål. Det oppfordres til bruk av oransje caps, vest etc under jakt. Alltid gi beskjed til ansvarshavende før du går i marka.</p>
+      </div>
+      <div class="regel-card reveal">
+        <h3>Ettersøk og vilt</h3>
+        <p>Skadeskyting skal meldes umiddelbart. Hvert jaktfelt skal ha godkjent ettersøkshund tilgjengelig. Ettersøk prioriteres alltid fremfor videre jakt.</p>
+      </div>
+      <div class="regel-card reveal">
+        <h3>Respekt for naturen</h3>
+        <p>Ingen forsøpling. Alt avfall tas med ut. Bålbrenning kun der det er tillatt. Respekter dyreliv, beitemark og hverandres jaktområder.</p>
+      </div>
+      <div class="regel-card reveal">
+        <h3>Jegeravgift og lisens</h3>
+        <p>Gyldig jegeravgift og løsnet jaktkort er obligatorisk. Kontroll kan forekomme i marka. Jakt uten gyldig dokumentasjon er ulovlig og medfører eksklusjon.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VEDTEKTER -->
+  <div id="vedtekter" class="section-dark">
+    <section>
+      <p class="section-label reveal">Juridisk grunnlag</p>
+      <h2 class="reveal">Vedtekter</h2>
+      <div class="divider reveal"></div>
+      <p class="reveal" style="max-width:680px; color:var(--fog); margin-bottom:2.5rem;">Vedtektene er fastsatt av Østre Innlandet jordskifterett ved dom 15. mai 2025 og trådte i kraft 1. april 2026. Nedenfor gjengis et utvalg av de viktigste paragrafene.</p>
+
+      <div class="vedtekter-grid reveal">
+
+        <div class="vedtekter-item">
+          <div class="par">§ 1</div>
+          <h3>Navn og område</h3>
+          <p>Laget heter <em>Åmot Vestre Viltlag</em>. Det omfatter eiendommer og rettigheter på vestsiden av Åmot i Åmot og Rendalen kommuner med et samlet areal på ca. 227 480 dekar.</p>
+        </div>
+
+        <div class="vedtekter-item">
+          <div class="par">§ 2</div>
+          <h3>Rettslig form</h3>
+          <p>Laget er et tingsrettslig sameie (jordskiftelag) med pliktig medeierskap for alle grunneiere og rettshavere med mer enn 20 dekar tellende areal innenfor lagets grenser.</p>
+        </div>
+
+        <div class="vedtekter-item">
+          <div class="par">§ 3</div>
+          <h3>Formål</h3>
+          <p>Laget skal fremme en bærekraftig og rasjonell viltforvaltning, ivareta medlemmenes interesser overfor offentlige myndigheter, og sørge for at jakten utøves forsvarlig og i samsvar med gjeldende lovgivning.</p>
+        </div>
+
+        <div class="vedtekter-item">
+          <div class="par">§ 4</div>
+          <h3>Medeierskap og andeler</h3>
+          <p>Andel fastsettes av jordskifteretten i forhold til tellende areal. Kun eiendommer med minst 20 dekar tellende areal er pliktige medeiere. Andelen følger eiendommen ved salg eller overdragelse.</p>
+        </div>
+
+        <div class="vedtekter-item">
+          <div class="par">§ 6</div>
+          <h3>Årsmøte</h3>
+          <p>Ordinært årsmøte holdes innen 1. april hvert år. Alle medeiere har møterett. Stemmerett utøves i forhold til andel. Styret innkaller med minst 14 dagers varsel. Årsmøtet fastsetter blant annet jaktkortpriser og kvoteutnyttelse.</p>
+        </div>
+
+        <div class="vedtekter-item">
+          <div class="par">§ 8</div>
+          <h3>Styre</h3>
+          <p>Laget ledes av et styre på fem medlemmer valgt av årsmøtet. Styrelederen velges særskilt for to år av gangen. Styret er beslutningsdyktig når minst tre medlemmer er til stede.</p>
+        </div>
+
+        <div class="vedtekter-item">
+          <div class="par">§ 11</div>
+          <h3>Jakt og jaktfelt</h3>
+          <p>Lagets areal er inndelt i jaktfelt på minimum 10 000 dekar. Hvert jaktfelt ledes av en jaktleder valgt av feltets medeiere. Jakt utøves kun av kortinnehavere og etter tildelte kvoter. Ulovlig jakt anmeldes.</p>
+        </div>
+
+<div class="vedtekter-item">
+          <div class="par">§§ 14–16</div>
+          <h3>Endringer og oppløsning</h3>
+          <p>Vedtektsendringer krever 2/3 flertall av de avgitte stemmer på ordinært eller ekstraordinært årsmøte. Oppløsning av laget krever jordskifterettens samtykke og 3/4 flertall. Lagets midler tilfaller ved oppløsning medeierne etter andelsbrøk.</p>
+        </div>
+
+      </div>
+
+      <p class="reveal" style="margin-top:2rem; font-size:0.8rem; color:var(--fog);">Fullstendige vedtekter finnes i jordskiftedommen av 15. mai 2025. Kontakt styret for innsyn.</p>
+    </section>
+  </div>
+
+  <!-- SESONG -->
+  <div id="sesong">
+    <div class="inner">
+      <p class="section-label reveal">Jaktkalender</p>
+      <h2 class="reveal">Sesong og<br>åpningstider</h2>
+      <div class="divider reveal"></div>
+
+      <div class="sesong-grid reveal">
+        <div class="sesong-item">
+          <div class="dyr">Elg</div>
+          <div class="dato">25. sep – 31. okt</div>
+          <div class="info">Jakttid fastsatt av kommunen. Kvote tildelt per jaktfelt.</div>
+        </div>
+        <div class="sesong-item">
+          <div class="dyr">Hjort</div>
+          <div class="dato">25. sep – 31. jan</div>
+          <div class="info">Kontroller alltid gjeldende kvote og kvotetildeling for feltet.</div>
+        </div>
+        <div class="sesong-item">
+          <div class="dyr">Rådyr</div>
+          <div class="dato">1. aug – 23. des</div>
+          <div class="info">Rådyrjakt tillatt innenfor fastsatte perioder etter art og kjønn.</div>
+        </div>
+        <div class="sesong-item">
+          <div class="dyr">Rype og Skogsfugl</div>
+          <div class="dato">10. sep – 28. feb</div>
+          <div class="info">Skogsfugl og ryper – sjekk lokale reguleringer hvert år.</div>
+        </div>
+        <div class="sesong-item">
+          <div class="dyr">Rødrev</div>
+          <div class="dato">Helårs</div>
+          <div class="info">Skadeviltregulering etter behov, med meldeplikt til laget.</div>
+        </div>
+        <div class="sesong-item">
+          <div class="dyr">Bever</div>
+          <div class="dato">1. okt – 30. apr</div>
+          <div class="info">Forvaltning i samarbeid med grunneiere langs vassdrag.</div>
+        </div>
+      </div>
+      <p style="margin-top:1.2rem; font-size:0.8rem; color:var(--fog);">* Datoer er veiledende og kan endres. Alltid sjekk Miljødirektoratets gjeldende jakttider.</p>
+    </div>
+  </div>
+
+  <!-- KONTAKT -->
+  <section id="kontakt">
+    <div class="kontakt-info reveal">
+      <p class="section-label">Kontakt</p>
+      <h2>Ta kontakt<br>med laget</h2>
+      <div class="divider"></div>
+      <p>Spørsmål om jaktkortsalg, kvote, sesong eller lagets retningslinjer? Ta kontakt med lagets leder eller sekretær.</p>
+      <p style="margin-top:1.5rem;"
+    </div>
+
+    <div class="kontakt-box reveal">
+      <h3>Kontaktinformasjon</h3>
+
+      <div class="kontakt-row">
+        <label>Leder</label>
+        <span>Aril Nordstad</span>
+      </div>
+      <div class="kontakt-row">
+        <label>Telefon</label>
+        <span>99 22 24 01</span>
+      </div>
+      <div class="kontakt-row">
+        <label>E-post</label>
+        <span>styret@amotvestreviltlag.no</span>
+      </div>
+      <div class="kontakt-row">
+        <label>Kommune</label>
+        <span>Åmot, Innlandet</span>
+      </div>
+      <div class="kontakt-row">
+        <label>Org.nr</label>
+        <span>937 176 279</span>
+      </div>
+    </div>
+  </section>
+
+<!-- FOOTER -->
+  <footer>
+    <span>Åmot Vestre Viltlag</span> &nbsp;·&nbsp; Org.nr 937 176 279 &nbsp;·&nbsp; styret@amotvestreviltlag.no
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+
+  </script>
+
+
+
+</body></html>
