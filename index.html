@@ -747,7 +747,20 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--forest);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        z-index: 1000;
+        font-size: 1.2rem;
+      }
+      .nav-links.open { display: flex; }
       section { padding: 4rem 1.5rem; }
       #om { grid-template-columns: 1fr; gap: 3rem; }
       #kontakt { grid-template-columns: 1fr; gap: 3rem; }
@@ -767,6 +780,29 @@
       #smavilt .inner { padding: 0 1.5rem; }
   
     }
+  
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
   </style>
 </head>
 <body>
@@ -774,16 +810,20 @@
   <!-- NAV -->
   <nav>
     <div class="nav-logo">ÅVV</div>
-    <ul class="nav-links">
-      <li><a href="#om">Om laget</a></li>
-      <li><a href="#kart">Kart</a></li>
-      <li><a href="#jaktkort">Jaktkort</a></li>
-      <li><a href="#smavilt">Kjøp kort</a></li>
-      <li><a href="#jaktfelt">Jaktfelt</a></li>
-      <li><a href="#sesong">Sesong</a></li>
-      <li><a href="#vedtekter">Vedtekter</a></li>
-      <li><a href="#kontakt">Kontakt</a></li>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#om" onclick="closeMenu()">Om laget</a></li>
+      <li><a href="#jaktkort" onclick="closeMenu()">Jaktmuligheter</a></li>
+      <li><a href="#smavilt" onclick="closeMenu()">Kjøp kort</a></li>
+      <li><a href="#jaktfelt" onclick="closeMenu()">Jaktfelt</a></li>
+      <li><a href="#kart" onclick="closeMenu()">Kart</a></li>
+      <li><a href="#regler" onclick="closeMenu()">Regler</a></li>
+      <li><a href="#vedtekter" onclick="closeMenu()">Vedtekter</a></li>
+      <li><a href="#sesong" onclick="closeMenu()">Sesong</a></li>
+      <li><a href="#kontakt" onclick="closeMenu()">Kontakt</a></li>
     </ul>
+    <button class="hamburger" id="hamburger" aria-label="Meny" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
   <!-- HERO -->
@@ -882,7 +922,7 @@
         <div class="jaktkort-card reveal">
           <div class="viltart">Småvilt</div>
           <div class="jaktkort-type">Jaktkortsalg</div>
-          <p>Jaktkort for rype, skogsfugl, rødrev og bever kjøpes fra jaktfeltene. Jaktfeltene organiserer dette selv. Ta kontakt med de enkelte jaktfelt hvis du er interessert i småviltjakt. Medeiere har fortrinnsrett. Hvis du er medeier og ikke får tak i smålviltjakt på egenhånd har viltlaget et jaktfelt det kan jaktes småvilt i fra 10.september. Ta kontakt med styret..</p>
+          <p>Jaktkort for rype, skogsfugl, hare, rødrev og bever kjøpes fra jaktfeltene. Jaktfeltene organiserer dette selv. Ta kontakt med de enkelte jaktfelt hvis du er interessert i småviltjakt. Medeiere har fortrinnsrett. Hvis du er medeier og ikke får tak i smålviltjakt på egenhånd har viltlaget et jaktfelt det kan jaktes småvilt i fra 10.september. Ta kontakt med styret..</p>
         </div>
         <div class="jaktkort-card reveal">
           <div class="viltart">Rovdyr</div>
@@ -1059,7 +1099,7 @@
         </tr>
       </tbody>
     </table>
-    <p style="margin-top:1rem; font-size:0.78rem; color:var(--fog);">* Fyll inn kontaktperson, e-post og telefon for hvert jaktfelt. Kontaktpersonen er som regel jaktleder eller grunneier for feltet. For jakt- og kortspørsmål, ta kontakt direkte med det aktuelle feltet.</p>
+    <p style="margin-top:1rem; font-size:0.78rem; color:var(--fog);">* Kontaktpersonen er som regel jaktleder for feltet.</p>
   </section>
 
   <!-- KART -->
@@ -1131,7 +1171,7 @@
         <div class="vedtekter-item">
           <div class="par">§ 1</div>
           <h3>Navn og område</h3>
-          <p>Laget heter <em>Åmot Vestre Viltlag</em>. Det omfatter eiendommer og rettigheter på vestsiden av Åmot i Åmot og Rendalen kommuner med et samlet areal på ca. 227 480 dekar.</p>
+          <p>Laget heter <em>Åmot Vestre Viltlag</em>. Det omfatter eiendommer og rettigheter på vestsiden av Glomma i Åmot kommune, nord for Åsta Elva, med et samlet areal på ca. 227 480 dekar.</p>
         </div>
 
         <div class="vedtekter-item">
@@ -1161,7 +1201,7 @@
         <div class="vedtekter-item">
           <div class="par">§ 8</div>
           <h3>Styre</h3>
-          <p>Laget ledes av et styre på fem medlemmer valgt av årsmøtet. Styrelederen velges særskilt for to år av gangen. Styret er beslutningsdyktig når minst tre medlemmer er til stede.</p>
+          <p>Laget ledes av et styre på fem medlemmer valgt av årsmøtet. Styrelederen velges særskilt for ett år av gangen. Styret er beslutningsdyktig når minst tre medlemmer er til stede.</p>
         </div>
 
         <div class="vedtekter-item">
@@ -1192,28 +1232,33 @@
       <div class="sesong-grid reveal">
         <div class="sesong-item">
           <div class="dyr">Elg</div>
-          <div class="dato">25. sep – 31. okt</div>
+          <div class="dato">25. sep – 23. des</div>
           <div class="info">Jakttid fastsatt av kommunen. Kvote tildelt per jaktfelt.</div>
         </div>
         <div class="sesong-item">
           <div class="dyr">Hjort</div>
-          <div class="dato">25. sep – 31. jan</div>
-          <div class="info">Kontroller alltid gjeldende kvote og kvotetildeling for feltet.</div>
+          <div class="dato">1. sep – 23.des</div>
+          <div class="info">Kontroller alltid gjeldende kvote og kvotetildeling for Viltlaget.</div>
         </div>
         <div class="sesong-item">
           <div class="dyr">Rådyr</div>
-          <div class="dato">1. aug – 23. des</div>
+          <div class="dato">10. aug – 23. des</div>
           <div class="info">Rådyrjakt tillatt innenfor fastsatte perioder etter art og kjønn.</div>
         </div>
         <div class="sesong-item">
           <div class="dyr">Rype og Skogsfugl</div>
-          <div class="dato">10. sep – 28. feb</div>
+          <div class="dato">10. sep – 23.des</div>
           <div class="info">Skogsfugl og ryper – sjekk lokale reguleringer hvert år.</div>
         </div>
         <div class="sesong-item">
           <div class="dyr">Rødrev</div>
-          <div class="dato">Helårs</div>
+          <div class="dato">15.juli-15.april</div>
           <div class="info">Skadeviltregulering etter behov, med meldeplikt til laget.</div>
+ 	</div>
+        <div class="sesong-item">
+          <div class="dyr">Hare</div>
+          <div class="dato">10.sept-28.feb</div>
+          <div class="info">Småviltkort.</div>
         </div>
         <div class="sesong-item">
           <div class="dyr">Bever</div>
@@ -1280,6 +1325,18 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 
+
+  
+    function toggleMenu() {
+      const links = document.getElementById('nav-links');
+      const btn = document.getElementById('hamburger');
+      links.classList.toggle('open');
+      btn.classList.toggle('open');
+    }
+    function closeMenu() {
+      document.getElementById('nav-links').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
+    }
 
   </script>
 
