@@ -803,7 +803,38 @@
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+  
+    #jaktfelt-map {
+      width: 100%;
+      height: 480px;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .leaflet-popup-content-wrapper {
+      background: var(--forest);
+      color: var(--cream);
+      border-radius: 8px;
+    }
+    .leaflet-popup-tip { background: var(--forest); }
+    .leaflet-popup-content {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .leaflet-popup-content h3 {
+      font-family: 'Playfair Display', serif;
+      margin: 0 0 0.4rem 0;
+      color: var(--amber);
+      font-size: 1.05rem;
+    }
+    .leaflet-popup-content a { color: var(--cream); text-decoration: underline; }
+    @media (max-width: 768px) {
+      #jaktfelt-map { height: 360px; }
+    }
+
   </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
 
@@ -1109,6 +1140,12 @@
       <h2 class="reveal">Kart over<br>feltet</h2>
       <div class="divider reveal"></div>
 
+      <!-- Interaktivt jaktfeltkart -->
+      <div class="kart-interaktiv-block reveal">
+        <p class="kart-pdf-label">Interaktivt kart – klikk på et felt for informasjon</p>
+        <div id="jaktfelt-map"></div>
+      </div>
+
       <!-- Jaktfelt-kart (PDF) -->
       <div class="kart-pdf-block reveal">
         <p class="kart-pdf-label">Offisielt jaktfeltkart – vedtatt på årsmøtet 12. mars 2026</p>
@@ -1119,10 +1156,10 @@
           aria-label="Jaktfeltkart Åmot Vestre Viltlag">
           <div class="kart-pdf-fallback">
             <p>Nettleseren din kan ikke vise PDF-filer direkte.</p>
-            <a href="Kart-jaktfelt%20feb%2026%20(2).pdf" download class="btn-download">Last ned jaktfeltkartet (PDF)</a>
+            <a href="Kart%20jaktfelt%20feb26.pdf" download class="btn-download">Last ned jaktfeltkartet (PDF)</a>
           </div>
         </object>
-        <a href="Kart-jaktfelt%20feb%2026%20(2).pdf" download class="kart-pdf-download">&#8595; Last ned kart (PDF)</a>
+        <a href="Kart%20jaktfelt%20feb26.pdf" download class="kart-pdf-download">&#8595; Last ned kart (PDF)</a>
       </div>
 
     </div>
@@ -1311,6 +1348,7 @@
     <span>Åmot Vestre Viltlag</span> &nbsp;·&nbsp; Org.nr 937 176 279 &nbsp;·&nbsp; styret@amotvestreviltlag.no
   </footer>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script>
     // Scroll reveal
     const observer = new IntersectionObserver((entries) => {
@@ -1337,6 +1375,59 @@
       document.getElementById('nav-links').classList.remove('open');
       document.getElementById('hamburger').classList.remove('open');
     }
+
+  
+    // Interaktivt jaktfeltkart
+    const feltFarger = {
+      1:"#7a9b6e", 2:"#c9a14a", 3:"#5e8c7a", 4:"#b06a4f",
+      5:"#8a8c4e", 6:"#6e8aa3", 7:"#a3724e", 8:"#7e6ea3",
+      9:"#9b6e8c", 10:"#6ea38c", 11:"#a39b4e", 12:"#8c6e6e"
+    };
+
+    const map = L.map('jaktfelt-map', { scrollWheelZoom: false });
+
+    L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+      maxZoom: 17,
+      attribution: 'Kartdata: © OpenStreetMap-bidragsytere, SRTM | Kartografi: © OpenTopoMap (CC-BY-SA)'
+    }).addTo(map);
+
+    fetch('jaktfelt-felt.geojson')
+      .then(r => r.json())
+      .then(data => {
+        const layer = L.geoJSON(data, {
+          style: feature => ({
+            color: '#f5f0e6',
+            weight: 1.5,
+            fillColor: feltFarger[feature.properties.feltnummer] || '#7a9b6e',
+            fillOpacity: 0.45
+          }),
+          onEachFeature: (feature, lyr) => {
+            const p = feature.properties;
+            let kontaktHtml = '';
+            if (p.kontakt_navn) {
+              kontaktHtml += `<div>${p.kontakt_navn}</div>`;
+            }
+            if (p.kontakt_tlf) {
+              kontaktHtml += `<div>Tlf: ${p.kontakt_tlf}</div>`;
+            }
+            if (p.kontakt_epost) {
+              kontaktHtml += `<div><a href="mailto:${p.kontakt_epost}">${p.kontakt_epost}</a></div>`;
+            }
+            if (!kontaktHtml) {
+              kontaktHtml = '<div>Ta kontakt med styret for info</div>';
+            }
+            lyr.bindPopup(
+              `<h3>Felt ${p.feltnummer} – ${p.jaktlag}</h3>` +
+              `<div>Areal: ca. ${p.areal_da.toLocaleString('nb-NO')} daa</div>` +
+              kontaktHtml
+            );
+            lyr.on('mouseover', () => lyr.setStyle({ fillOpacity: 0.7 }));
+            lyr.on('mouseout', () => lyr.setStyle({ fillOpacity: 0.45 }));
+          }
+        }).addTo(map);
+        map.fitBounds(layer.getBounds(), { padding: [10, 10] });
+      })
+      .catch(err => console.error('Kunne ikke laste jaktfeltkart:', err));
 
   </script>
 
