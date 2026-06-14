@@ -833,8 +833,28 @@
       #jaktfelt-map { height: 360px; }
     }
 
+  
+    .leaflet-control-layers {
+      background: var(--forest);
+      color: var(--cream);
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+    }
+    .leaflet-control-layers-toggle {
+      background-color: var(--forest);
+    }
+    .leaflet-control-layers label { color: var(--cream); }
+    .leaflet-bar a {
+      background-color: var(--forest);
+      color: var(--cream);
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    .leaflet-bar a:hover { background-color: rgba(255,255,255,0.1); }
+
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.fullscreen@3.0.2/Control.FullScreen.css" />
 </head>
 <body>
 
@@ -1338,6 +1358,7 @@
   </footer>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.fullscreen@3.0.2/Control.FullScreen.js"></script>
   <script>
     // Scroll reveal
     const observer = new IntersectionObserver((entries) => {
@@ -1373,12 +1394,28 @@
       9:"#9b6e8c", 10:"#6ea38c", 11:"#a39b4e", 12:"#8c6e6e"
     };
 
-    const map = L.map('jaktfelt-map', { scrollWheelZoom: false });
+    const map = L.map('jaktfelt-map', {
+      scrollWheelZoom: false,
+      fullscreenControl: true,
+      fullscreenControlOptions: { title: 'Vis i fullskjerm', titleCancel: 'Avslutt fullskjerm' }
+    });
 
-    L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-      maxZoom: 17,
-      attribution: 'Kartdata: © OpenStreetMap-bidragsytere, SRTM | Kartografi: © OpenTopoMap (CC-BY-SA)'
-    }).addTo(map);
+    const topoKartverket = L.tileLayer('https://cache.kartverket.no/v1/wmts/1.0.0/topo/default/webmercator/{z}/{y}/{x}.png', {
+      maxZoom: 18,
+      attribution: 'Kartdata: © Kartverket'
+    });
+
+    const satellitt = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 18,
+      attribution: 'Tiles © Esri'
+    });
+
+    topoKartverket.addTo(map);
+
+    L.control.layers({
+      'Norsk topografisk': topoKartverket,
+      'Satellitt': satellitt
+    }, null, { position: 'topright', collapsed: true }).addTo(map);
 
     fetch('jaktfelt-felt.geojson')
       .then(r => r.json())
