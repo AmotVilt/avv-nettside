@@ -834,9 +834,10 @@
     }
 
   
-    .leaflet-control-layers {
-      background: var(--forest);
-      color: var(--cream);
+    .leaflet-control-layers,
+    .leaflet-control-layers-expanded {
+      background: var(--forest) !important;
+      color: var(--cream) !important;
       border-radius: 8px;
       font-family: 'Inter', sans-serif;
       font-size: 0.85rem;
@@ -844,7 +845,15 @@
     .leaflet-control-layers-toggle {
       background-color: var(--forest);
     }
-    .leaflet-control-layers label { color: var(--cream); }
+    .leaflet-control-layers-list,
+    .leaflet-control-layers label,
+    .leaflet-control-layers label span,
+    .leaflet-control-layers-selector + span {
+      color: var(--cream) !important;
+    }
+    .leaflet-control-layers-separator {
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
     .leaflet-bar a {
       background-color: var(--forest);
       color: var(--cream);
